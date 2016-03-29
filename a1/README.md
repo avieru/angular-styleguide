@@ -1,29 +1,8 @@
 # Angular 1 Style Guide
 
-## Angular Team Endorsed
-Special thanks to Igor Minar, lead on the Angular team, for reviewing, contributing feedback, and entrusting me to shepherd this guide.
-
-## Purpose
-*Opinionated Angular style guide for teams by [@john_papa](//twitter.com/john_papa)*
-
-If you are looking for an opinionated style guide for syntax, conventions, and structuring Angular applications, then step right in. These styles are based on my development experience with [Angular](//angularjs.org), presentations, [Pluralsight training courses](http://app.pluralsight.com/author/john-papa) and working in teams.
-
-The purpose of this style guide is to provide guidance on building Angular applications by showing the conventions I use and, more importantly, why I choose them.
-
->If you like this guide, check out my [Angular Patterns: Clean Code](http://jpapa.me/ngclean) course at Pluralsight which is a companion to this guide.
-
-  [![Angular Patterns: Clean Code](https://raw.githubusercontent.com/johnpapa/angular-styleguide/master/a1/assets/ng-clean-code-banner.png)](http://jpapa.me/ngclean)
-
-## Community Awesomeness and Credit
-Never work in a vacuum. I find that the Angular community is an incredible group who are passionate about sharing experiences. As such, Angular expert Todd Motto and I have collaborated on many styles and conventions. We agree on most, and some we diverge. I encourage you to check out [Todd's guidelines](https://github.com/toddmotto/angular-styleguide) to get a sense for his approach and how it compares.
-
-Many of my styles have been from the many pair programming sessions [Ward Bell](https://twitter.com/wardbell) and I have had. My friend Ward has certainly helped influence the ultimate evolution of this guide.
-
 ## See the Styles in a Sample App
 While this guide explains the *what*, *why* and *how*, I find it helpful to see them in practice. This guide is accompanied by a sample application that follows these styles and patterns. You can find the [sample application (named modular) here](https://github.com/johnpapa/ng-demos) in the `modular` folder. Feel free to grab it, clone it, or fork it. [Instructions on running it are in its readme](https://github.com/johnpapa/ng-demos/tree/master/modular).
 
-##Translations
-[Translations of this Angular style guide](https://github.com/johnpapa/angular-styleguide/tree/master/a1/i18n) are maintained by the community and can be found here.
 
 ## Table of Contents
 
@@ -2492,115 +2471,6 @@ While this guide explains the *what*, *why* and *how*, I find it helpful to see 
 
 **[Back to top](#table-of-contents)**
 
-## Testing
-Unit testing helps maintain clean code, as such I included some of my recommendations for unit testing foundations with links for more information.
-
-### Write Tests with Stories
-###### [Style [Y190](#style-y190)]
-
-  - Write a set of tests for every story. Start with an empty test and fill them in as you write the code for the story.
-
-    *Why?*: Writing the test descriptions helps clearly define what your story will do, will not do, and how you can measure success.
-
-    ```javascript
-    it('should have Avengers controller', function() {
-        // TODO
-    });
-
-    it('should find 1 Avenger when filtered by name', function() {
-        // TODO
-    });
-
-    it('should have 10 Avengers', function() {
-        // TODO (mock data?)
-    });
-
-    it('should return Avengers via XHR', function() {
-        // TODO ($httpBackend?)
-    });
-
-    // and so on
-    ```
-
-### Testing Library
-###### [Style [Y191](#style-y191)]
-
-  - Use [Jasmine](http://jasmine.github.io/) or [Mocha](http://mochajs.org) for unit testing.
-
-    *Why?*: Both Jasmine and Mocha are widely used in the Angular community. Both are stable, well maintained, and provide robust testing features.
-
-    Note: When using Mocha, also consider choosing an assert library such as [Chai](http://chaijs.com). I prefer Mocha.
-
-### Test Runner
-###### [Style [Y192](#style-y192)]
-
-  - Use [Karma](http://karma-runner.github.io) as a test runner.
-
-    *Why?*: Karma is easy to configure to run once or automatically when you change your code.
-
-    *Why?*: Karma hooks into your Continuous Integration process easily on its own or through Grunt or Gulp.
-
-    *Why?*: Some IDE's are beginning to integrate with Karma, such as [WebStorm](http://www.jetbrains.com/webstorm/) and [Visual Studio](https://visualstudiogallery.msdn.microsoft.com/02f47876-0e7a-4f6c-93f8-1af5d5189225).
-
-    *Why?*: Karma works well with task automation leaders such as [Grunt](http://gruntjs.com/) (with [grunt-karma](https://github.com/karma-runner/grunt-karma)) and [Gulp](http://gulpjs.com/). When using Gulp, use [Karma](https://github.com/karma-runner/karma) directly and not with a plugin as the API can be called directly.
-
-    ```javascript
-    /* recommended */
-
-    // Gulp example with Karma directly
-    function startTests(singleRun, done) {
-        var child;
-        var excludeFiles = [];
-        var fork = require('child_process').fork;
-        var karma = require('karma').server;
-        var serverSpecs = config.serverIntegrationSpecs;
-
-        if (args.startServers) {
-            log('Starting servers');
-            var savedEnv = process.env;
-            savedEnv.NODE_ENV = 'dev';
-            savedEnv.PORT = 8888;
-            child = fork(config.nodeServer);
-        } else {
-            if (serverSpecs && serverSpecs.length) {
-                excludeFiles = serverSpecs;
-            }
-        }
-
-        karma.start({
-            configFile: __dirname + '/karma.conf.js',
-            exclude: excludeFiles,
-            singleRun: !!singleRun
-        }, karmaCompleted);
-
-        ////////////////
-
-        function karmaCompleted(karmaResult) {
-            log('Karma completed');
-            if (child) {
-                log('shutting down the child process');
-                child.kill();
-            }
-            if (karmaResult === 1) {
-                done('karma: tests failed with code ' + karmaResult);
-            } else {
-                done();
-            }
-        }
-    }
-    ```
-
-### Stubbing and Spying
-###### [Style [Y193](#style-y193)]
-
-  - Use [Sinon](http://sinonjs.org/) for stubbing and spying.
-
-    *Why?*: Sinon works well with both Jasmine and Mocha and extends the stubbing and spying features they offer.
-
-    *Why?*: Sinon makes it easier to toggle between Jasmine and Mocha, if you want to try both.
-
-    *Why?*: Sinon has descriptive messages when tests fail the assertions.
-
 ### Headless Browser
 ###### [Style [Y194](#style-y194)]
 
@@ -2632,35 +2502,6 @@ Unit testing helps maintain clean code, as such I included some of my recommenda
     ```javascript
     "jasmine": true,
     "mocha": true,
-    ```
-
-  ![Testing Tools](https://raw.githubusercontent.com/johnpapa/angular-styleguide/master/a1/assets/testing-tools.png)
-
-### Organizing Tests
-###### [Style [Y197](#style-y197)]
-
-  - Place unit test files (specs) side-by-side with your client code. Place specs that cover server integration or test multiple components in a separate `tests` folder.
-
-    *Why?*: Unit tests have a direct correlation to a specific component and file in source code.
-
-    *Why?*: It is easier to keep them up to date since they are always in sight. When coding whether you do TDD or test during development or test after development, the specs are side-by-side and never out of sight nor mind, and thus more likely to be maintained which also helps maintain code coverage.
-
-    *Why?*: When you update source code it is easier to go update the tests at the same time.
-
-    *Why?*: Placing them side-by-side makes it easy to find them and easy to move them with the source code if you move the source.
-
-    *Why?*: Having the spec nearby makes it easier for the source code reader to learn how the component is supposed to be used and to discover its known limitations.
-
-    *Why?*: Separating specs so they are not in a distributed build is easy with grunt or gulp.
-
-    ```
-    /src/client/app/customers/customer-detail.controller.js
-                             /customer-detail.controller.spec.js
-                             /customers.controller.js
-                             /customers.controller.spec.js
-                             /customers.module.js
-                             /customers.route.js
-                             /customers.route.spec.js
     ```
 
 **[Back to top](#table-of-contents)**
@@ -2695,58 +2536,6 @@ Unit testing helps maintain clean code, as such I included some of my recommenda
     *Why?*: animate.css is widely used and tested.
 
     Note: See this [great post by Matias Niemelä on Angular animations](http://www.yearofmoo.com/2013/08/remastered-animation-in-angularjs-1-2.html)
-
-**[Back to top](#table-of-contents)**
-
-## Comments
-
-### jsDoc
-###### [Style [Y220](#style-y220)]
-
-  - If planning to produce documentation, use [`jsDoc`](http://usejsdoc.org/) syntax to document function names, description, params and returns. Use `@namespace` and `@memberOf` to match your app structure.
-
-    *Why?*: You can generate (and regenerate) documentation from your code, instead of writing it from scratch.
-
-    *Why?*: Provides consistency using a common industry tool.
-
-    ```javascript
-    /**
-     * Logger Factory
-     * @namespace Factories
-     */
-    (function() {
-      angular
-          .module('app')
-          .factory('logger', logger);
-
-      /**
-       * @namespace Logger
-       * @desc Application wide logger
-       * @memberOf Factories
-       */
-      function logger($log) {
-          var service = {
-             logError: logError
-          };
-          return service;
-
-          ////////////
-
-          /**
-           * @name logError
-           * @desc Logs errors
-           * @param {String} msg Message to log
-           * @returns {String}
-           * @memberOf Factories.Logger
-           */
-          function logError(msg) {
-              var loggedMsg = 'Error: ' + msg;
-              $log.error(loggedMsg);
-              return loggedMsg;
-          };
-      }
-    })();
-    ```
 
 **[Back to top](#table-of-contents)**
 
@@ -3082,30 +2871,6 @@ Use file templates or snippets to help follow consistent styles and patterns. He
     ngtranslate  // uses $translate service with its promise
     ```
 
-### vim
-###### [Style [Y255](#style-y255)]
-
-  - vim snippets that follow these styles and guidelines.
-
-    - Download the [vim Angular snippets](assets/vim-angular-snippets?raw=true)
-    - set [neosnippet.vim](https://github.com/Shougo/neosnippet.vim)
-    - copy snippets to snippet directory
-
-  - vim UltiSnips snippets that follow these styles and guidelines.
-
-    - Download the [vim Angular UltiSnips snippets](assets/vim-angular-ultisnips?raw=true)
-    - set [UltiSnips](https://github.com/SirVer/ultisnips)
-    - copy snippets to UltiSnips directory
-
-    ```javascript
-    ngcontroller // creates an Angular controller
-    ngdirective  // creates an Angular directive
-    ngfactory    // creates an Angular factory
-    ngmodule     // creates an Angular module
-    ngservice    // creates an Angular service
-    ngfilter     // creates an Angular filter
-    ```
-
 ### Visual Studio Code
 
 ###### [Style [Y256](#style-y256)]
@@ -3122,32 +2887,6 @@ Use file templates or snippets to help follow consistent styles and patterns. He
     ngmodule     // creates an Angular module
     ngservice    // creates an Angular service
     ```
-
-**[Back to top](#table-of-contents)**
-
-## Yeoman Generator
-###### [Style [Y260](#style-y260)]
-
-You can use the [HotTowel yeoman generator](http://jpapa.me/yohottowel) to create an app that serves as a starting point for Angular that follows this style guide.
-
-1. Install generator-hottowel
-
-  ```
-  npm install -g generator-hottowel
-  ```
-
-2. Create a new folder and change directory to it
-
-  ```
-  mkdir myapp
-  cd myapp
-  ```
-
-3. Run the generator
-
-  ```
-  yo hottowel helloWorld
-  ```
 
 **[Back to top](#table-of-contents)**
 
